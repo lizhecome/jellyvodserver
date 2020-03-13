@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alivc.longVideo.dao.LongVideoConsoleDao" >
+
+
+	 <sql id="Long_Video_Column_List" >
+     v.id, v.tv_id, v.title, v.description,v.video_id,v.duration,v.size  ,v.tags  ,v.transcode_status  ,v.snapshot_status  ,v.censor_status,
+     v.cover_url, v.first_frame_url,
+     v.creation_time,  v.tags,v.isRecommend ,v.isHomePage,isVip
+    </sql>
+
+	<insert id="insertLongVideo" parameterType="com.alivc.longVideo.pojo.LongVideo" >
+	    insert into demo_long_videos ( video_id, title, description, duration,
+	     cover_url, censor_status, transcode_status, snapshot_status, creation_time, size, tags ,isVip,isRecommend,isHomePage )
+	    values ( #{videoId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+	    #{description,jdbcType=VARCHAR}, #{duration,jdbcType=FLOAT}, #{coverUrl,jdbcType=VARCHAR},#{censorStatus,jdbcType=VARCHAR},
+	    #{transcodeStatus,jdbcType=VARCHAR}, #{snapshotStatus,jdbcType=VARCHAR}, #{creationTime,jdbcType=TIMESTAMP}, #{size,jdbcType=INTEGER},
+		#{tags,jdbcType=VARCHAR}, #{isVip,jdbcType=VARCHAR}, #{isRecommend,jdbcType=VARCHAR}, #{isHomePage,jdbcType=VARCHAR} )
+    </insert>
+
+	<update id="updateLongVideo" parameterType="com.alivc.longVideo.pojo.LongVideo" >
+		update demo_long_videos
+		<set >
+			<if test="videoId !=null and videoId !=''">
+				video_id = #{videoId,jdbcType=VARCHAR},
+			</if>
+			<if test="title !=null and title !=''">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="description !=null and description !=''">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="duration !=null and duration !=''">
+				duration = #{duration,jdbcType=FLOAT},
+			</if>
+			<if test="coverUrl !=null and coverUrl !=''">
+				cover_url = #{coverUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="creationTime !=null and creationTime !=''">
+				creation_time = #{creationTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="size !=null and size !=''">
+				size = #{size,jdbcType=INTEGER},
+			</if>
+			<if test="tags !=null and tags !=''">
+				tags = #{tags,jdbcType=VARCHAR},
+			</if>
+			<if test="tvId !=null and tvId !=''">
+				tv_id = #{tvId,jdbcType=VARCHAR},
+			</if>
+			<if test="tvName !=null and tvName !=''">
+				tv_name = #{tvName,jdbcType=VARCHAR},
+			</if>
+			<if test="firstFrameUrl !=null and firstFrameUrl !=''">
+				first_frame_url = #{firstFrameUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="transcodeStatus !=null and transcodeStatus !=''">
+				transcode_status = #{transcodeStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="snapshotStatus !=null and snapshotStatus !=''">
+				snapshot_status = #{snapshotStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="censorStatus !=null and censorStatus !=''">
+				censor_status = #{censorStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="isRecommend !=null and isRecommend !=''">
+				isRecommend = #{isRecommend,jdbcType=VARCHAR},
+			</if>
+			<if test="sort !=null and sort !=''">
+				sort = #{sort,jdbcType=VARCHAR},
+			</if>
+			<if test="isHomePage !=null and isHomePage !=''">
+				isHomePage = #{isHomePage,jdbcType=VARCHAR},
+			</if>
+			<if test="isVip !=null and isVip !=''">
+				isVip = #{isVip,jdbcType=VARCHAR},
+			</if>
+
+		</set>
+		where video_id = #{videoId,jdbcType=INTEGER}
+	</update>
+
+	<insert id="insertTvPlay" parameterType="com.alivc.longVideo.pojo.TvPlay" >
+	    insert into demo_tv_play ( tv_id, tv_name,title, description,total,
+	     cover_url,  creation_time, tags,isRelease,isRecommend,isHomePage )
+	    values ( #{tvId,jdbcType=VARCHAR}, #{tvName,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+	    #{description,jdbcType=VARCHAR},#{total,jdbcType=VARCHAR},  #{coverUrl,jdbcType=VARCHAR},
+	     #{creationTime,jdbcType=TIMESTAMP}, #{tags,jdbcType=VARCHAR}, #{isRelease,jdbcType=VARCHAR}, #{isRecommend,jdbcType=VARCHAR}, #{isHomePage,jdbcType=VARCHAR}  )
+    </insert>
+
+	<delete id="deleteTvPlayById" >
+		delete from demo_tv_play
+		where tv_id =   #{tvId,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteLongVideoById" >
+		delete from demo_long_videos
+		where video_id =   #{videoId,jdbcType=VARCHAR}
+	</delete>
+
+	<update id="updateTvPlay" parameterType="com.alivc.longVideo.pojo.TvPlay" >
+		update demo_tv_play
+		<set >
+			<if test="title !=null and title !=''">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="description !=null and description !=''">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="coverUrl !=null and coverUrl !=''">
+				cover_url = #{coverUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="tags !=null and tags !=''">
+				tags = #{tags,jdbcType=VARCHAR},
+			</if>
+			<if test="tvId !=null and tvId !=''">
+				tv_id = #{tvId,jdbcType=VARCHAR},
+			</if>
+			<if test="tvName !=null and tvName !=''">
+				tv_name = #{tvName,jdbcType=VARCHAR},
+			</if>
+			<if test="total !=null and total !=''">
+				total = #{total,jdbcType=VARCHAR},
+			</if>
+			<if test="isRecommend !=null and isRecommend !=''">
+				isRecommend = #{isRecommend,jdbcType=VARCHAR},
+			</if>
+			<if test="isRelease !=null and isRelease !=''">
+				isRelease = #{isRelease,jdbcType=VARCHAR},
+			</if>
+			<if test="isHomePage !=null and isHomePage !=''">
+				isHomePage = #{isHomePage,jdbcType=VARCHAR},
+			</if>
+
+		</set>
+		where tv_id = #{tvId,jdbcType=INTEGER}
+	</update>
+
+
+	<update id="updateLongVideoSort" parameterType="com.alivc.longVideo.pojo.LongVideo" >
+		update demo_long_videos set sort = sort + 1 where sort >=  #{sort,jdbcType=VARCHAR} and tv_id = #{tvId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateTvPlayTotal" parameterType="java.lang.String" >
+		update demo_tv_play set total = total + 1 where   tv_id = #{tvId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="subtractLongVideoSort" parameterType="com.alivc.longVideo.pojo.LongVideoParm" >
+		update demo_long_videos set sort = sort - 1
+		<where>
+			<if test="sort != null and sort != ''">
+				sort >  #{sort,jdbcType=VARCHAR}
+			</if>
+			<if test="updateSort != null and updateSort != ''">
+				and  sort  <![CDATA[<= ]]> #{updateSort,jdbcType=VARCHAR}
+			</if>
+		</where>
+
+	</update>
+
+	<update id="addLongVideoSort" parameterType="com.alivc.longVideo.pojo.LongVideoParm" >
+		update demo_long_videos set sort = sort + 1 where sort >=  #{updateSort,jdbcType=VARCHAR} and  sort  &lt; #{sort,jdbcType=VARCHAR}
+	</update>
+</mapper>

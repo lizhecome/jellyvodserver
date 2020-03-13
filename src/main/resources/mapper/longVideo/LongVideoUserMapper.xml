@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.alivc.longVideo.dao.LongVideoUserDao">
+     <resultMap id="UserResultMap" type="com.alivc.longVideo.pojo.LongVideoUser">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="avatar_url" property="avatarUrl" jdbcType="VARCHAR" />
+		<result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+		<result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<select id="getUserById" parameterType="com.alivc.longVideo.pojo.LongVideoUser" resultMap="UserResultMap">
+		SELECT id, user_id, nick_name, avatar_url,gmt_create,gmt_modified from demo_userinfo
+		<where>
+		<if test="id !=null  and id !=''">
+			and id = #{id,jdbcType=INTEGER}    
+		</if>
+		<if test="userId !=null and userId !=''">
+			and user_id = #{userId,jdbcType=VARCHAR}   
+		</if>
+		  </where> 
+	</select>
+	
+    <insert id="insertGuest" useGeneratedKeys="true" keyProperty="id" parameterType="com.alivc.longVideo.pojo.LongVideoUser" >
+	    insert into demo_userinfo (user_id, nick_name, avatar_url, gmt_create)
+	    values 
+	    (#{userId,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR},#{gmtCreate,jdbcType=TIMESTAMP})
+    </insert>
+  
+
+</mapper>

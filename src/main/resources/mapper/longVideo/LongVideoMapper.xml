@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alivc.longVideo.dao.LongVideoDao" >
+ <resultMap id="longVideoResultMap" type="com.alivc.longVideo.pojo.LongVideo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="tv_id" property="tvId" jdbcType="VARCHAR" />
+	    <result column="tv_name" property="tvName" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="cover_url" property="coverUrl" jdbcType="VARCHAR" />
+		<result column="first_frame_url" property="firstFrameUrl" jdbcType="VARCHAR" />
+		<result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+		<result column="tags" property="tags" jdbcType="VARCHAR" />
+	    <result column="video_id" property="videoId" jdbcType="VARCHAR" />
+	 	<result column="duration" property="duration" jdbcType="VARCHAR" />
+	 	<result column="size" property="size" jdbcType="VARCHAR" />
+	 	<result column="sort" property="sort" jdbcType="VARCHAR" />
+	 	<result column="transcode_status" property="transcodeStatus" jdbcType="VARCHAR" />
+	 	<result column="snapshot_status" property="snapshotStatus" jdbcType="VARCHAR" />
+	 	<result column="censor_status" property="censorStatus" jdbcType="VARCHAR" />
+		<result column="isRecommend" property="isRecommend" jdbcType="VARCHAR" />
+        <result column="isHomePage" property="isHomePage" jdbcType="VARCHAR" />
+        <result column="isVip" property="isVip" jdbcType="VARCHAR" />
+	</resultMap>
+
+	 <sql id="Video_Column_List" >
+     v.id, v.tv_id,v.tv_name, v.title, v.description,v.video_id,v.duration,v.size  ,v.sort   ,v.transcode_status  ,v.snapshot_status  ,v.censor_status,
+     v.cover_url, v.first_frame_url,
+     v.creation_time,  TRIM(v.tags) tags  ,v.isRecommend ,v.isHomePage,isVip
+    </sql>
+
+
+  <select id="getLongVideoList"  parameterType="com.alivc.longVideo.pojo.LongVideoParm"  resultMap="longVideoResultMap">
+		SELECT 
+			 <include refid="Video_Column_List" />
+		from demo_long_videos v
+		<where>
+			<if test="id != null and id != ''">
+				v.id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="videoId != null and videoId != ''">
+				and v.video_id = #{videoId,jdbcType=VARCHAR}
+			</if>
+			<if test="tvId != null and tvId != ''">
+				and v.tv_id = #{tvId,jdbcType=VARCHAR}
+			</if>
+			<if test="onlyVideo != null and onlyVideo == true">
+				and (v.tv_id is null or v.tv_id = '')
+			</if>
+			<if test="title != null and title != '' ">
+				and v.title  like  '%${title}%'
+			</if>
+			<if test="tags != null and tags != '' ">
+				and v.tags like  '%${tags}%'
+			</if>
+			<if test="censorStatus != null and censorStatus != '' ">
+				and v.censor_status = #{censorStatus,jdbcType=VARCHAR}
+			</if>
+			<if test="isRecommend != null and isRecommend != '' ">
+				and v.isRecommend = #{isRecommend,jdbcType=VARCHAR}
+			</if>
+			<if test="isHomePage != null and isHomePage != '' ">
+				and v.isHomePage = #{isHomePage,jdbcType=VARCHAR}
+			</if>
+			<if test="isVip != null and isVip != '' ">
+				and v.isVip = #{isVip,jdbcType=VARCHAR}
+			</if>
+			<if test="startTime !=null and startTime != '' ">
+			    <![CDATA[  and DATE_FORMAT(v.creation_time, '%Y-%m-%d %k:%i:%s') >= DATE_FORMAT(#{startTime,jdbcType=TIMESTAMP}, '%Y-%m-%d %k:%i:%s')   ]]>
+	  		</if>
+	  		<if test="endTime !=null and endTime != '' ">
+	  		    <![CDATA[  and DATE_FORMAT(v.creation_time, '%Y-%m-%d %k:%i:%s') <= DATE_FORMAT(#{endTime,jdbcType=TIMESTAMP}, '%Y-%m-%d %k:%i:%s')    ]]>
+	  		</if>
+	    </where>
+	  <choose>
+		  <when test="tvId != null and tvId != ''">
+			  order by v.sort
+		  </when>
+		  <otherwise>
+			  order by v.id desc
+		  </otherwise>
+	  </choose>
+
+	  LIMIT #{pageIndex,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectLongVideoNums" parameterType="com.alivc.longVideo.pojo.LongVideoParm" resultType="java.lang.Integer">
+		select count(*) from demo_long_videos  v
+		<where>
+			<if test="id != null and id != ''">
+				v.id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="videoId != null and tvId != ''">
+				and v.tv_id = #{tvId,jdbcType=VARCHAR}
+			</if>
+			<if test="tvId != null and tvId != ''">
+				and v.tv_id = #{tvId,jdbcType=VARCHAR}
+			</if>
+			<if test="title != null and title != '' ">
+				and v.title  like  '%${title}%'
+			</if>
+			<if test="tags != null and tags != '' ">
+				and v.tags like  '%${tags}%'
+			</if>
+			<if test="censorStatus != null and censorStatus != '' ">
+				and v.censor_status = #{censorStatus,jdbcType=VARCHAR}
+			</if>
+			<if test="isRecommend != null and isRecommend != '' ">
+				and v.isRecommend = #{isRecommend,jdbcType=VARCHAR}
+			</if>
+			<if test="isHomePage != null and isHomePage != '' ">
+				and v.isHomePage = #{isHomePage,jdbcType=VARCHAR}
+			</if>
+			<if test="isVip != null and isVip != '' ">
+				and v.isVip = #{isVip,jdbcType=VARCHAR}
+			</if>
+			<if test="startTime !=null and startTime != '' ">
+				<![CDATA[  and DATE_FORMAT(v.creation_time, '%Y-%m-%d %k:%i:%s') >= DATE_FORMAT(#{startTime,jdbcType=TIMESTAMP}, '%Y-%m-%d %k:%i:%s')   ]]>
+			</if>
+			<if test="endTime !=null and endTime != '' ">
+				<![CDATA[  and DATE_FORMAT(v.creation_time, '%Y-%m-%d %k:%i:%s') <= DATE_FORMAT(#{endTime,jdbcType=TIMESTAMP}, '%Y-%m-%d %k:%i:%s')    ]]>
+			</if>
+		</where>
+	</select>
+
+    
+</mapper>

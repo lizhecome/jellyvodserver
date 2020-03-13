@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alivc.longVideo.dao.TvPlayDao" >
+ <resultMap id="tvPlayResultMap" type="com.alivc.longVideo.pojo.TvPlay">
+		<id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="tv_id" property="tvId" jdbcType="VARCHAR" />
+	    <result column="tv_name" property="tvName" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="cover_url" property="coverUrl" jdbcType="VARCHAR" />
+		<result column="first_frame_url" property="firstFrameUrl" jdbcType="VARCHAR" />
+		<result column="creation_time" property="creationTime" jdbcType="TIMESTAMP" />
+		<result column="tags" property="tags" jdbcType="VARCHAR" />
+		<result column="total" property="total" jdbcType="VARCHAR" />
+		<result column="cate_id" property="cateId" jdbcType="INTEGER" />
+		<result column="cate_name" property="cateName" jdbcType="VARCHAR" />
+		<result column="isRecommend" property="isRecommend" jdbcType="VARCHAR" />
+        <result column="isHomePage" property="isHomePage" jdbcType="VARCHAR" />
+        <result column="isRelease" property="isRelease" jdbcType="VARCHAR" />
+	</resultMap>
+
+	 <sql id="Base_Column_List" >
+     v.id, v.tv_id, v.tv_name, v.title, v.description, v.total,
+     v.cover_url, v.first_frame_url,
+     v.creation_time,  TRIM(v.tags) tags,v.cate_id,v.cate_name ,v.isRecommend ,v.isHomePage,v.isRelease
+    </sql>
+
+
+  <select id="getTvPlayList"  parameterType="com.alivc.longVideo.pojo.TvPlayParm"  resultMap="tvPlayResultMap">
+		SELECT 
+			 <include refid="Base_Column_List" />
+		from demo_tv_play v
+		<where>
+		    <if test="id != null and id != ''">
+				 v.id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="tvId != null and tvId != ''">
+				and v.tv_id = #{tvId,jdbcType=VARCHAR}
+			</if>
+			<if test="tvName != null and tvName != ''">
+				and v.tv_name = #{tvName,jdbcType=VARCHAR}
+			</if>
+			<if test="tags != null and tags != '' ">
+				and v.tags like  '%${tags}%'
+			</if>
+			<if test="isRecommend != null and isRecommend != '' ">
+				and v.isRecommend = #{isRecommend,jdbcType=VARCHAR}
+			</if>
+			<if test="isHomePage != null and isHomePage != '' ">
+				and v.isHomePage = #{isHomePage,jdbcType=VARCHAR}
+			</if>
+			<if test="isRelease != null and isRelease != '' ">
+				and v.isRelease = #{isRelease,jdbcType=VARCHAR}
+			</if>
+			<if test="title != null and title != '' ">
+				and v.title  like  '%${title}%'
+			</if>
+			<if test="startTime !=null and startTime != '' ">
+			    <![CDATA[  and DATE_FORMAT(v.creation_time, '%Y-%m-%d %k:%i:%s') >= DATE_FORMAT(#{startTime,jdbcType=TIMESTAMP}, '%Y-%m-%d %k:%i:%s')   ]]>
+	  		</if>
+	  		<if test="endTime !=null and endTime != '' ">
+	  		    <![CDATA[  and DATE_FORMAT(v.creation_time, '%Y-%m-%d %k:%i:%s') <= DATE_FORMAT(#{endTime,jdbcType=TIMESTAMP}, '%Y-%m-%d %k:%i:%s')    ]]>
+	  		</if>
+	    </where>
+		  order by v.id desc LIMIT #{pageIndex,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectTvPlayNums" parameterType="com.alivc.longVideo.pojo.TvPlayParm" resultType="java.lang.Integer">
+		select count(*) from demo_tv_play  v
+		<where>
+			<if test="id != null and id != ''">
+				v.id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="tvId != null and tvId != ''">
+				and v.tv_id = #{tvId,jdbcType=VARCHAR}
+			</if>
+			<if test="tvName != null and tvName != ''">
+				and v.tv_name = #{tvName,jdbcType=VARCHAR}
+			</if>
+			<if test="isRecommend != null and isRecommend != '' ">
+				and v.isRecommend = #{isRecommend,jdbcType=VARCHAR}
+			</if>
+			<if test="isHomePage != null and isHomePage != '' ">
+				and v.isHomePage = #{isHomePage,jdbcType=VARCHAR}
+			</if>
+			<if test="isRelease != null and isRelease != '' ">
+				and v.isRelease = #{isRelease,jdbcType=VARCHAR}
+			</if>
+			<if test="title != null and title != '' ">
+				and v.title   like  '%${title}%'
+			</if>
+			<if test="tags != null and tags != '' ">
+				and v.tags like  '%${tags}%'
+			</if>
+			<if test="startTime !=null and startTime != '' ">
+				<![CDATA[  and DATE_FORMAT(v.creation_time, '%Y-%m-%d %k:%i:%s') >= DATE_FORMAT(#{startTime,jdbcType=TIMESTAMP}, '%Y-%m-%d %k:%i:%s')   ]]>
+			</if>
+			<if test="endTime !=null and endTime != '' ">
+				<![CDATA[  and DATE_FORMAT(v.creation_time, '%Y-%m-%d %k:%i:%s') <= DATE_FORMAT(#{endTime,jdbcType=TIMESTAMP}, '%Y-%m-%d %k:%i:%s')    ]]>
+			</if>
+		</where>
+	</select>
+
+    
+</mapper>

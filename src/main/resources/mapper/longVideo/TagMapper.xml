@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alivc.longVideo.dao.TagDao" >
+	<resultMap id="tagResultMap" type="com.alivc.longVideo.pojo.Tag">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="tag_id" property="tagId" jdbcType="VARCHAR" />
+		<result column="tag_name" property="tagName" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getTagsListByType"  parameterType="java.lang.String"  resultMap="tagResultMap">
+		select
+		id,tag_id,tag_name,type
+		from demo_tag
+		where type = #{type,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="insertTag" parameterType="com.alivc.longVideo.pojo.Tag" >
+		insert into demo_tag ( tag_id, tag_name,type  )
+		values ( #{tagId,jdbcType=VARCHAR}, #{tagName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR} )
+	</insert>
+
+	<select id="getTagsList"   resultMap="tagResultMap">
+		select
+		id,tag_id,tag_name,type
+		from demo_tag
+		where type = #{type,jdbcType=VARCHAR} and tag_name =  #{tagName,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteTagById" >
+		delete from demo_tag
+		where tag_id =   #{tagId,jdbcType=VARCHAR}
+	</delete>
+
+
+</mapper>
