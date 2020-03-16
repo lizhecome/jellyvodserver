@@ -18,6 +18,7 @@ import java.net.URISyntaxException;
  */
 public class AkUtil {
     public static JSONObject getAkInfo() throws Exception {
+        //TODO lizhe video.jellycloud.vip
         String url = "http://100.100.100.200/latest/meta-data/ram/security-credentials/" + ConfigMapUtil.getValueByKey("roleName");
         String response = httpGet(url);
         JSONObject jsonObject = JSONObject.parseObject(response);
