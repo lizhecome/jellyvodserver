@@ -4,3 +4,4 @@ target/
 .factorypath
 .classpath
 my.log
+src/main/java/com/alivc/.DS_Store
